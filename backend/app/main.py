@@ -2,6 +2,7 @@ from fastapi import FastAPI, UploadFile, File
 from pypdf import PdfReader
 from app.retrieval import search_similar_chunks
 from openai import OpenAI
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 from app.embeddings import add_chunks
@@ -13,6 +14,14 @@ client = OpenAI()
 from app.chunking import chunk_text
 
 app = FastAPI(title="TalkToPDF")
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 class AskRequest(BaseModel):
     question: str
